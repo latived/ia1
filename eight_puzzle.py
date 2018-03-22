@@ -60,4 +60,3 @@ def move(state, direction):
         state[blank_zero], state[direction]= state[direction], 0
     else:
         print("Invalid move!")
-
