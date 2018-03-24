@@ -46,17 +46,40 @@ valid_moves = {1 : [2,4],
                8 : [5,7,9],
                9 : [6,8]}
 
-def check(state):
-    for i in range(9):
+def check_state(state):
+    for i in range(8):
         if i+1 != state[i]:
-            return false
-    return true
+            return False
+    if state[8] != 0: return False
+    return True
 
+def iterativo(state):
+    print("Não implementado.")
 
-def move(state, direction):
-    blank_zero = state.index(0)
-    valid_for_dir = valid_moves[blank_zero]
-    if (direction in valid_for_dir):
-        state[blank_zero], state[direction]= state[direction], 0
+# na solução poderá aparecer mais de um caminho válido
+moves = []
+def dfs(state):
+    if check_state(state):
+        print("Solucionado! {}".format(state))
+        print("Estados procurados, total: {}".format(len(moves)))
     else:
-        print("Invalid move!")
+        # Here we do pos_zero + 1 because in valid_moves
+        # we have the positions from 1 to 9
+        pos_zero = state.index(0) 
+        for d in valid_moves[pos_zero + 1]:
+            temp_state = state.copy()
+            # Same here: d is in [1,9], so we have to subtract 1
+            temp_state[pos_zero], temp_state[d-1]= temp_state[d-1], 0
+            if [pos_zero, d-1] not in moves or [d-1, pos_zero] not in moves: 
+                print("{0} to {1}".format(pos_zero+1, d))
+                moves.append([pos_zero, d-1])
+                dfs(temp_state)
+
+
+def main():
+    state = [1, 2, 3, 4, 5, 6, 7, 0, 8]
+    print("Initial state: {}".format(state))
+    dfs(state)
+
+if __name__ == "__main__":
+    main()
