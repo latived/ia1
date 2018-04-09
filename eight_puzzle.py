@@ -53,15 +53,24 @@ def check_state(state):
     if state[8] != 0: return False
     return True
 
+def show_state(state):
+    print("{0} {1} {2}\n{3} {4} {5}\n{6} {7} {8}\n".format(
+            state[0], state[1], state[2],
+            state[3], state[4], state[5],
+            state[6], state[7], state[8])
+            )
+
 def iterativo(state):
     print("Não implementado.")
 
 # na solução poderá aparecer mais de um caminho válido
 moves = []
+found = False
 def dfs(state):
     if check_state(state):
-        print("Solucionado! {}".format(state))
-        print("Estados procurados, total: {}".format(len(moves)))
+        print("-> solucionado! total de estados procurados: {}".format(len(moves)))
+        global found 
+        found = True
     else:
         # Here we do pos_zero + 1 because in valid_moves
         # we have the positions from 1 to 9
@@ -70,15 +79,20 @@ def dfs(state):
             temp_state = state.copy()
             # Same here: d is in [1,9], so we have to subtract 1
             temp_state[pos_zero], temp_state[d-1]= temp_state[d-1], 0
-            if [pos_zero, d-1] not in moves or [d-1, pos_zero] not in moves: 
-                print("{0} to {1}".format(pos_zero+1, d))
+            if ([pos_zero, d-1] not in moves \
+                    or [d-1, pos_zero] not in moves) \
+                    and not found: 
+                print("move {0} -> {1}".format(pos_zero+1, d))
+                print("conf: ")
+                show_state(temp_state) 
                 moves.append([pos_zero, d-1])
                 dfs(temp_state)
 
 
 def main():
-    state = [1, 2, 3, 4, 5, 6, 7, 0, 8]
-    print("Initial state: {}".format(state))
+    state = [0, 2, 3, 4, 5, 6, 7, 1, 8]
+    print("Initial state: \n")
+    show_state(state)
     dfs(state)
 
 if __name__ == "__main__":
