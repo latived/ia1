@@ -11,8 +11,8 @@ valid_moves = {0 : [1,3],
                8 : [5,7]}
 
 def check_state(state):
-    #goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    goal_state = [1, 2, 3, 8, 0, 4, 7, 6, 5]
+    goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    #goal_state = [1, 2, 3, 8, 0, 4, 7, 6, 5]
     return state == goal_state
 
 def show_states_conf(state):
@@ -57,6 +57,7 @@ def search(state, search_type = "bfs"):
             show_states_conf(init_state)
             print("Final state: ")
             show_states_conf(cs)
+            print("Final lvl: ", reps-1)
             return True
         else:
             print("Lvl ", reps)
@@ -83,10 +84,44 @@ def search(state, search_type = "bfs"):
                 open_states.extend(cs_children)
     print("Solução não encontrada.")
     return False
- 
+
+# IDDFS
+def IDDFS(state, limit):
+    for depth in range(0, limit):
+        print("#########################")
+        print("Began at limit ", depth)
+        print("Lvl ", depth)
+        found = DLS(state, depth)
+        if found:
+            return found
+        else:
+            print("bad limit. nothing here. next limit...")
+
+def DLS(state, depth):
+    print("actual: ")
+    show_states_conf(state)
+    # with and we get more
+    if depth == 0 and check_state(state):
+        print("found it.")
+        return True 
+    if depth > 0:
+        for child in gen_children(state):
+            show_states_conf(child)
+            print("deepening more...")
+            found = DLS(child, depth-1)
+            print("next child...? ")
+            if found:
+                print(" not really.")
+                return found
+
+    print("hitting bottom. nothing here. going back...")
+    return False
+
+
+
 def main():
-    state = [2, 8, 3, 1, 6, 4, 7, 0, 5]
-    #state = [1, 2, 3, 4, 5, 6, 0, 7, 8]
+    #state = [2, 8, 3, 1, 6, 4, 7, 0, 5]
+    state = [1, 2, 3, 4, 5, 6, 0, 7, 8]
     print("Lvl 0")
     show_states_conf(state)
     print("Com DFS: ")
