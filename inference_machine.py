@@ -31,9 +31,9 @@ def backward(goals, rules_base, facts_base):
 
 # data-driven search
 def forward(goal, rules_base, facts_base, pos=0):
-    print("Goal to be proved: ", goal)
+    print("Goal to be proved '", goal, "'")
     if goal in facts_base:
-        print(goal, "in facts' base! Proved :)")
+        print("'", goal, "' found in facts' base! Proved :)")
         return True
 
     if pos == len(rules_base):
@@ -41,33 +41,34 @@ def forward(goal, rules_base, facts_base, pos=0):
         return False
 
     csq = list(rules_base.keys())[pos]
-    print("Trying to prove ", csq)
+    print("Trying to prove '", csq, "'")
     
     antecedents = rules_base[csq].copy()
-    print("Need to check: ", antecedents)
+    print("\tNeed to check: ", antecedents)
 
     if csq not in facts_base:
         for ant in rules_base[csq]:
             if ant in facts_base:
-                print(ant, " in facts' base!")
+                print("\t'",ant, "' in facts' base!")
                 antecedents.remove(ant)
-    
-
-    if len(antecedents) == 0:
-        print("Facts' base updated! Starting again from first rule...")
-        facts_base.append(csq)
-        pos = 0
+        
+        if len(antecedents) == 0:
+            print("\tFacts' base updated with '",csq,"'! Starting again from first rule...")
+            facts_base.append(csq)
+            pos = 0
+        else:
+            print("\tCouldn't prove the remaining antecedents yet: ", antecedents)
     else:
-        print("Couldn't prove the remaining antecedents yet: ", antecedents)
+        print("'",csq,"' already in facts' base!")
 
     return forward(goal, rules_base, facts_base, pos+1)
-
 
 def main():
     rules_base = {'is a frog': ["croaks", "eats flies"],
                 'is canary': ["chirps", "sings"],
                 'is green': ["is a frog"],
-                'is yellow': ["is a canary"]
+                'is yellow': ["is a canary"],
+                'is a reptil': ["is a frog"]
                 }
 
     facts_base = ["croaks", "eats flies"]
