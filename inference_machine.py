@@ -33,7 +33,7 @@ def backward(goals, rules_base, facts_base):
 
 # data-driven search
 def forward(goal, rules_base, facts_base, pos=0):
-    print("Goal to be proved '", goal, "'")
+#    print("Goal to be proved '", goal, "'")
     if goal in facts_base:
         print("'", goal, "' found in facts' base! Proved :)")
         return True
@@ -56,8 +56,9 @@ def forward(goal, rules_base, facts_base, pos=0):
         
         if len(antecedents) == 0:
             print("\tFacts' base updated with '",csq,"'! Starting again from first rule...")
+            print("\tFacts: ", facts_base)
             facts_base.append(csq)
-            pos = 0
+            pos = -1
         else:
             print("\tCouldn't prove the remaining antecedents yet: ", antecedents)
     else:
@@ -65,13 +66,15 @@ def forward(goal, rules_base, facts_base, pos=0):
 
     return forward(goal, rules_base, facts_base, pos+1)
 
-def main():
+def get_rules(file_name):
     rules_base = {}
-    with open("rules_base") as rules:
+    facts_base = []
+    with open(file_name) as rules:
         for rule in rules:
             props = re.split('[IF|AND|THEN]', rule)
             if len(props) == 1:
-                break
+                if len(props[0]) > 0: facts_base.append(props[0].split('\n')[0])
+                continue
             while '' in props: props.remove('')
             csq = props[-1]
             csq = csq[1:len(csq)-1]
@@ -82,15 +85,20 @@ def main():
                 rules_base[csq] = []
                 rules_base[csq].extend(antecedents)
             else:
-                rules_base[csq.extend(antecedents)
+                rules_base[csq].extend(antecedents)
 
-    facts_base = ["croaks", "eats flies"]
-    goal = "is green"
+    return [rules_base, facts_base]
+
+def main():
+    rules_base, facts_base = get_rules('rules_base')
+    print(rules_base)
+    print(facts_base)
+    goal = "X is green"
     
-    print("Testing backward chaining for... 'X ", goal, "'")
+    print("Testing backward chaining for... '", goal, "'")
     backward(goal, rules_base, facts_base)
     print("... # # # ...")
-    print("Testing forward chaining for... 'X ", goal, "'")
+    print("Testing forward chaining for... '", goal, "'")
     forward(goal, rules_base, facts_base)
 
 if __name__ == "__main__":
