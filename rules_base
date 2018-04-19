@@ -1,3 +1,5 @@
+X eats flies
+X croaks
 IF X is a frog THEN X is green
 IF X croaks AND X eats flies THEN X is frog
 IF X chirps AND X sings THEN X is a canary
