@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+
 # goal-driven search
 def backward(goals, rules_base, facts_base):
     print("Goals to be proved: ", goals)
@@ -64,12 +66,23 @@ def forward(goal, rules_base, facts_base, pos=0):
     return forward(goal, rules_base, facts_base, pos+1)
 
 def main():
-    rules_base = {'is a frog': ["croaks", "eats flies"],
-                'is canary': ["chirps", "sings"],
-                'is green': ["is a frog"],
-                'is yellow': ["is a canary"],
-                'is a reptil': ["is a frog"]
-                }
+    rules_base = {}
+    with open("rules_base") as rules:
+        for rule in rules:
+            props = re.split('[IF|AND|THEN]', rule)
+            if len(props) == 1:
+                break
+            while '' in props: props.remove('')
+            csq = props[-1]
+            csq = csq[1:len(csq)-1]
+            antecedents = []
+            for ant in props[:len(props)-1]:
+                antecedents.append(ant[1:len(ant)-1])
+            if csq not in rules_base:
+                rules_base[csq] = []
+                rules_base[csq].extend(antecedents)
+            else:
+                rules_base[csq.extend(antecedents)
 
     facts_base = ["croaks", "eats flies"]
     goal = "is green"
