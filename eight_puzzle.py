@@ -110,31 +110,44 @@ def DLS(state, depth):
 
     return False
 
+def check_is_state_valid(state):
+    if len(state) != 9:
+        print("Estado inválido: tamanho {} não permitido.".format(len(state)))
+        return False
+    for i in range(9):
+        if i not in state:
+            print("Estado inválido: pelo menos um valor no intervalo (0-8) faltando.")
+            return False
+    return True
+
 def main():
     #state = [2, 8, 3, 1, 6, 4, 7, 0, 5]
     #state = [1, 2, 3, 4, 5, 6, 8, 7, 0]
     #state = [2, 4, 0, 8, 5, 3, 1, 7, 6]
-    state = [8,6,7,2,5,4,3,0,1]
+    #state = [8,6,7,2,5,4,3,0,1]
+    start_state = input("> ")
+    start_state = list(map(int, start_state.split()))
     goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    print("Estado inicial: ", state)
-    check_solvable(state)
-    print("Estado final: ", goal_state)
-    print("########### usando dfs #######################")
-    start = time.time()
-    search(state, "dfs")
-    end = time.time()
-    print("Tempo total: ", end - start)
-    print("########### usando bfs #######################")
-    start = time.time()
-    search(state) # bfs default
-    end = time.time()
-    print("Tempo total: ", end - start)
-    print("########### usando idfs ######################")
-    start = time.time()
-    IDDFS(state, 10000, 1000)
-    end = time.time()
-    print("Tempo total: ", end - start)
- 
+    if check_is_state_valid(start_state):
+        print("Estado inicial: ", start_state)
+        print("Estado final  : ", goal_state)
+        check_solvable(start_state)
+        print("\n########### usando dfs #######################")
+        start = time.time()
+        search(start_state, "dfs")
+        end = time.time()
+        print("Tempo total: ", end - start)
+        print("\n########### usando bfs #######################")
+        start = time.time()
+        search(start_state) # bfs default
+        end = time.time()
+        print("Tempo total: ", end - start)
+        print("\n########### usando idfs ######################")
+        start = time.time()
+        IDDFS(start_state, 10000, 1000)
+        end = time.time()
+        print("Tempo total: ", end - start)
+    
 if __name__ == "__main__":
      main()
  
