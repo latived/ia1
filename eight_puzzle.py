@@ -11,6 +11,7 @@ valid_moves = {0 : [1,3],
                6 : [3,7],
                7 : [4,8,6],
                8 : [5,7]}
+
 def check_solvable(state):
     acc = 0
     temp_state = state[:]
@@ -56,10 +57,11 @@ def search(state, search_type = "bfs"):
     init_state = state.copy()
     open_states = [state]
     closed_states = []
-    reps = 0
-    depth_bound = 100
-    while len(open_states) != 0 and (search_type == "bfs" or 
-            reps <= depth_bound):
+    reps = -1 # depth began at value 0
+    depth_bound = 5
+    # removed depth bound in while check
+    # removed search_type == "bfs" too
+    while len(open_states) != 0:
         reps += 1
         cs = open_states[0] # current state
         open_states.remove(cs)
@@ -68,16 +70,17 @@ def search(state, search_type = "bfs"):
             print("Total de iterações: ", reps)
             return True
         else:
-            cs_children = gen_children(cs)
             closed_states.append(cs)
             
-            for child in cs_children:
-                if (child in open_states) or (child in closed_states):
-                    cs_children.remove(child)
-            if search_type == "dfs":
-                open_states = cs_children + open_states
-            else:
-                open_states.extend(cs_children)
+            if reps <= depth_bound:
+                cs_children = gen_children(cs)
+                for child in cs_children:
+                    if (child in open_states) or (child in closed_states):
+                        cs_children.remove(child)
+                if search_type == "dfs":
+                    open_states = cs_children + open_states
+                else:
+                    open_states.extend(cs_children)
     print("Solução não encontrada.")
     print("Total de iterações: ", reps)
     return False
@@ -100,7 +103,6 @@ def IDDFS(state, limit, tx):
 
 def DLS(state, depth):
     if depth == 0 and check_state(state):
-        print(state)
         return True 
     if depth > 0:
         for child in gen_children(state):

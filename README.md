@@ -20,6 +20,7 @@ what needs to be done
 - [ ] add solutions' path 
     - [ ] dfs, bfs
     - [ ] idfs
+- [ ] add unit tests
 
 ## q2
 - [ ] fix forward chaining (no question needed, just get results in facts base)
