@@ -13,7 +13,7 @@ what needs to be done
     - [ ] dfs
     - [ ] bfs
     - [ ] idfs
-- [ ] fix dfs (idk why it is not working properly)
+- [x] fix dfs (idk why it is not working properly)
 - [ ] add solutions' depth in every algorithm 
     - [ ] dfs, bfs
     - [ ] idfs

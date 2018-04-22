@@ -49,7 +49,7 @@ def gen_children(state):
         children.append(new_state)
     return children
 
-def search(state, search_type = "bfs"):
+def search(state, search_type = "bfs", bound=False, depth_bound=0):
     if search_type not in ["bfs", "dfs"]: 
         print("Algoritmo inexistente: ", search_type)
         return False
@@ -58,7 +58,6 @@ def search(state, search_type = "bfs"):
     open_states = [state]
     closed_states = []
     reps = -1 # depth began at value 0
-    depth_bound = 5
     # removed depth bound in while check
     # removed search_type == "bfs" too
     while len(open_states) != 0:
@@ -72,7 +71,7 @@ def search(state, search_type = "bfs"):
         else:
             closed_states.append(cs)
             
-            if reps <= depth_bound:
+            if not bound or reps <= depth_bound:
                 cs_children = gen_children(cs)
                 for child in cs_children:
                     if (child in open_states) or (child in closed_states):
