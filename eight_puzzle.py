@@ -2,15 +2,20 @@
 
 import time
 
+# 0 1 2
+# 3 4 5
+# 6 7 8
+
+# em ordem horária a partir da direita
 valid_moves = {0 : [1,3],
-               1 : [0,2,4],
-               2 : [1,5],
-               3 : [0,4,6],
-               4 : [1,3,5,7],
-               5 : [2,8,4],
-               6 : [3,7],
-               7 : [4,8,6],
-               8 : [5,7]}
+               1 : [2,4,0],
+               2 : [5,1],
+               3 : [4,6,0],
+               4 : [5,7,3,1],
+               5 : [8,4,2],
+               6 : [7,3],
+               7 : [8,6,4],
+               8 : [7,5]}
 
 def check_solvable(state):
     acc = 0
@@ -59,12 +64,7 @@ def search(state, search_type = "bfs"):
     open_states = [state]
     closed_states = []
     reps = -1 # depth began at value 0
-    # removed depth bound in while check
-    # removed search_type == "bfs" too
-    # debug
-    stemp = []
     while len(open_states) != 0:
-        print(len(open_states))
         reps += 1
         cs = open_states[0] # current state
         open_states.remove(cs)
@@ -139,14 +139,14 @@ def main():
         print("Estado inicial: ", start_state)
         print("Estado final  : ", goal_state)
         check_solvable(start_state)
-        print("\n########### usando dfs #######################")
-        start = time.time()
-        search(start_state, "dfs")
-        end = time.time()
-        print("Tempo total: ", end - start)
         print("\n########### usando bfs #######################")
         start = time.time()
         search(start_state) # bfs default
+        end = time.time()
+        print("Tempo total: ", end - start)
+        print("\n########### usando dfs #######################")
+        start = time.time()
+        search(start_state, "dfs")
         end = time.time()
         print("Tempo total: ", end - start)
         print("\n########### usando idfs ######################")
