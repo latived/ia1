@@ -44,13 +44,15 @@ def show_states_conf(state):
         )
         )
 
+# modified to get path taken
 def gen_children(state):
-    idx_zero = state.index(0)
+    idx_zero = state[0].index(0)
     moves = valid_moves[idx_zero]
     children = []
     for move in moves:
-        new_state = state.copy()
-        new_state[move], new_state[idx_zero] = 0, state[move]
+        new_state = state[0].copy()
+        new_state[move], new_state[idx_zero] = 0, state[0][move]
+        new_state = (new_state, state[0], state[2]+1)
         children.append(new_state)
     return children
 
@@ -59,24 +61,27 @@ def search(state, search_type = "bfs"):
     if search_type not in ["bfs", "dfs"]: 
         print("Algoritmo inexistente: ", search_type)
         return False
-    # TODO: add (state, parent, length)
-    # necessary to know solutions depth
-    open_states = [state]
+   
+    state = (state, None, 0)
+    open_states = [state] # modified to know path taken
     closed_states = []
     reps = -1 # depth began at value 0
+    
     while len(open_states) != 0:
         reps += 1
         cs = open_states[0] # current state
         open_states.remove(cs)
         
-        if check_state(cs): 
+        if check_state(cs[0]): # modified
             print("Solução encontrada!")
             print("Total de iterações: ", reps)
+            print("Profundidade da solução: ", cs[2])
             return True
         else:
             closed_states.append(cs)
-
-            cs_children = gen_children(cs)
+    
+            # gen_children now returns (state, cs, lengh_par+1)
+            cs_children = gen_children(cs) 
             for child in cs_children.copy():
                 if (child in open_states):
                     cs_children.remove(child)
@@ -92,6 +97,7 @@ def search(state, search_type = "bfs"):
 
 # IDDFS
 def IDDFS(state, limit, tx):
+    state = (state, None, 0) 
     tx_temp = tx
     print("Limite usado: ", limit)
     print("Taxa de crescimento: ", tx)
@@ -99,7 +105,6 @@ def IDDFS(state, limit, tx):
         found = DLS(state, depth)
         if found:
             print("Solução encontrada!")
-            print("Total de profundidades testadas: ", depth) # TODO: mudanças em tx_temp
             return found
     if tx_temp <= limit:
         tx_temp += tx
@@ -107,7 +112,8 @@ def IDDFS(state, limit, tx):
         print("Limite alcançado... saindo...")
 
 def DLS(state, depth):
-    if depth == 0 and check_state(state):
+    if depth == 0 and check_state(state[0]):
+        print("Profundidade da solução: ", state[2]) # TODO: mudanças em tx_temp
         return True 
     if depth > 0:
         for child in gen_children(state):
@@ -135,10 +141,10 @@ def main():
     start_state = input("> ")
     start_state = list(map(int, start_state.split()))
     goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    if check_is_state_valid(start_state):
+    if check_is_state_valid(start_state) and check_solvable(start_state):
+
         print("Estado inicial: ", start_state)
         print("Estado final  : ", goal_state)
-        check_solvable(start_state)
         print("\n########### usando bfs #######################")
         start = time.time()
         search(start_state) # bfs default

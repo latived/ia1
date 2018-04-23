@@ -9,14 +9,10 @@ what needs to be done
 
 ## q1
 - [ ] modularize code
-- [ ] fix presentation stage
-    - [ ] dfs
-    - [ ] bfs
-    - [ ] idfs
+- [x] fix presentation stage
 - [x] fix dfs (idk why it is not working properly)
-- [ ] add solutions' depth in every algorithm 
-    - [ ] dfs, bfs
-    - [ ] idfs
+- [x] add solutions' depth in every algorithm 
+- [ ] add shortest path as solution depth
 - [ ] add solutions' path 
     - [ ] dfs, bfs
     - [ ] idfs
