@@ -49,37 +49,43 @@ def gen_children(state):
         children.append(new_state)
     return children
 
-def search(state, search_type = "bfs", bound=False, depth_bound=0):
+# TODO: add hash to see if state has been visited instead of list
+def search(state, search_type = "bfs"):
     if search_type not in ["bfs", "dfs"]: 
         print("Algoritmo inexistente: ", search_type)
         return False
     # TODO: add (state, parent, length)
-    init_state = state.copy()
+    # necessary to know solutions depth
     open_states = [state]
     closed_states = []
     reps = -1 # depth began at value 0
     # removed depth bound in while check
     # removed search_type == "bfs" too
+    # debug
+    stemp = []
     while len(open_states) != 0:
+        print(len(open_states))
         reps += 1
         cs = open_states[0] # current state
         open_states.remove(cs)
+        
         if check_state(cs): 
             print("Solução encontrada!")
             print("Total de iterações: ", reps)
             return True
         else:
             closed_states.append(cs)
-            
-            if not bound or reps <= depth_bound:
-                cs_children = gen_children(cs)
-                for child in cs_children:
-                    if (child in open_states) or (child in closed_states):
-                        cs_children.remove(child)
-                if search_type == "dfs":
-                    open_states = cs_children + open_states
-                else:
-                    open_states.extend(cs_children)
+
+            cs_children = gen_children(cs)
+            for child in cs_children.copy():
+                if (child in open_states):
+                    cs_children.remove(child)
+                if (child in closed_states):
+                    cs_children.remove(child)
+            if search_type == "dfs":
+                open_states = cs_children + open_states
+            else:
+                open_states.extend(cs_children)
     print("Solução não encontrada.")
     print("Total de iterações: ", reps)
     return False

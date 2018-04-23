@@ -20,6 +20,7 @@ what needs to be done
 - [ ] add solutions' path 
     - [ ] dfs, bfs
     - [ ] idfs
+- [ ] add thread to solve with each algorithm
 - [ ] add unit tests
 
 ## q2
