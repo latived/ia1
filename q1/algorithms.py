@@ -11,7 +11,6 @@ valid_moves = {0 : [1,3],
                6 : [7,3],
                7 : [8,6,4],
                8 : [7,5]}
-
 def gen_children(state):
     idx_zero = state[0].index(0)
     moves = valid_moves[idx_zero]
@@ -25,7 +24,7 @@ def gen_children(state):
 
 def search(state, search_type = "bfs"):
     if search_type not in ["bfs", "dfs"]: 
-        print("Algoritmo inexistente: ", search_type)
+        print("[erro] algoritmo inexistente: ", search_type)
         return False
    
     state = (state, None, 0)
@@ -39,9 +38,9 @@ def search(state, search_type = "bfs"):
         open_states.remove(cs)
         
         if check_state(cs[0]): # modified
-            print("Solução encontrada!")
-            print("Total de iterações: ", reps)
-            print("Profundidade da solução: ", cs[2])
+            print("[", search_type, "] solução encontrada!")
+            print("[", search_type, "] total de iterações: ", reps)
+            print("[", search_type, "] profundidade da solução: ", cs[2])
             return True
         else:
             closed_states.append(cs)
@@ -57,29 +56,28 @@ def search(state, search_type = "bfs"):
                 open_states = cs_children + open_states
             else:
                 open_states.extend(cs_children)
-    print("Solução não encontrada.")
-    print("Total de iterações: ", reps)
+    print("[", search_type, "] solução não encontrada.")
+    print("[", search_type, "] total de iterações: ", reps)
     return False
 
-# IDDFS
 def IDDFS(state, limit, tx):
     state = (state, None, 0) 
     tx_temp = tx
-    print("Limite usado: ", limit)
-    print("Taxa de crescimento: ", tx)
+    print("[iddfs] timite usado: ", limit)
+    print("[iddfs] taxa de crescimento: ", tx)
     for depth in range(0, tx_temp):
         found = DLS(state, depth)
         if found:
-            print("Solução encontrada!")
+            print("[iddfs] solução encontrada!")
             return found
     if tx_temp <= limit:
         tx_temp += tx
     else:
-        print("Limite alcançado... saindo...")
+        print("[iddfs] limite alcançado... saindo...")
 
 def DLS(state, depth):
     if depth == 0 and check_state(state[0]):
-        print("Profundidade da solução: ", state[2]) # TODO: mudanças em tx_temp
+        print("[iddfs] profundidade da solução: ", state[2]) # TODO: mudanças em tx_temp
         return True 
     if depth > 0:
         for child in gen_children(state):

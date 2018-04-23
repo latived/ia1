@@ -15,10 +15,10 @@ def check_solvable(state):
             if temp_state[n1] > temp_state[n2]: acc += 1
 
     if acc % 2 == 1:
-        print("Configuração impossível de ser solucionada!")
+        print("[erro] configuração impossível de ser solucionada!")
         return False
     else:
-        print("Solucionável! Pode tentar.")
+        print("[info] solucionável, pode tentar!")
         return True
 
 def check_state(state):
@@ -27,11 +27,11 @@ def check_state(state):
 
 def check_is_state_valid(state):
     if len(state) != 9:
-        print("Estado inválido: tamanho {} não permitido.".format(len(state)))
+        print("[erro] estado inválido: tamanho {} não permitido.".format(len(state)))
         return False
     for i in range(9):
         if i not in state:
-            print("Estado inválido: pelo menos um valor no intervalo (0-8) faltando.")
+            print("[erro] estado inválido: pelo menos um valor no intervalo (0-8) faltando.")
             return False
     return True
 
