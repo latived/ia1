@@ -1,10 +1,5 @@
-#!/usr/bin/env python3
 
-import time
-
-# 0 1 2
-# 3 4 5
-# 6 7 8
+from checks import check_state
 
 # em ordem horária a partir da direita
 valid_moves = {0 : [1,3],
@@ -17,34 +12,6 @@ valid_moves = {0 : [1,3],
                7 : [8,6,4],
                8 : [7,5]}
 
-def check_solvable(state):
-    acc = 0
-    temp_state = state[:]
-    temp_state.remove(0)
-    for n1 in range(len(temp_state)):
-        for n2 in range(n1, len(temp_state)):
-            if temp_state[n1] > temp_state[n2]: acc += 1
-
-    if acc % 2 == 1:
-        print("Configuração impossível de ser solucionada!")
-        return False
-    else:
-        print("Solucionável! Pode tentar.")
-        return True
-
-def check_state(state):
-    goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    return state == goal_state
-
-def show_states_conf(state):
-    print("\t{0} {1} {2}\n\t{3} {4} {5}\n\t{6} {7} {8}\n".format(
-        state[0], state[1], state[2],
-        state[3], state[4], state[5],
-        state[6], state[7], state[8]
-        )
-        )
-
-# modified to get path taken
 def gen_children(state):
     idx_zero = state[0].index(0)
     moves = valid_moves[idx_zero]
@@ -56,7 +23,6 @@ def gen_children(state):
         children.append(new_state)
     return children
 
-# TODO: add hash to see if state has been visited instead of list
 def search(state, search_type = "bfs"):
     if search_type not in ["bfs", "dfs"]: 
         print("Algoritmo inexistente: ", search_type)
@@ -122,45 +88,3 @@ def DLS(state, depth):
                 return found
 
     return False
-
-def check_is_state_valid(state):
-    if len(state) != 9:
-        print("Estado inválido: tamanho {} não permitido.".format(len(state)))
-        return False
-    for i in range(9):
-        if i not in state:
-            print("Estado inválido: pelo menos um valor no intervalo (0-8) faltando.")
-            return False
-    return True
-
-def main():
-    #state = [2, 8, 3, 1, 6, 4, 7, 0, 5]
-    #state = [1, 2, 3, 4, 5, 6, 8, 7, 0]
-    #state = [2, 4, 0, 8, 5, 3, 1, 7, 6]
-    #state = [8,6,7,2,5,4,3,0,1]
-    start_state = input("> ")
-    start_state = list(map(int, start_state.split()))
-    goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-    if check_is_state_valid(start_state) and check_solvable(start_state):
-
-        print("Estado inicial: ", start_state)
-        print("Estado final  : ", goal_state)
-        print("\n########### usando bfs #######################")
-        start = time.time()
-        search(start_state) # bfs default
-        end = time.time()
-        print("Tempo total: ", end - start)
-        print("\n########### usando dfs #######################")
-        start = time.time()
-        search(start_state, "dfs")
-        end = time.time()
-        print("Tempo total: ", end - start)
-        print("\n########### usando idfs ######################")
-        start = time.time()
-        IDDFS(start_state, 10000, 1000)
-        end = time.time()
-        print("Tempo total: ", end - start)
-    
-if __name__ == "__main__":
-     main()
- 
