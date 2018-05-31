@@ -43,7 +43,7 @@ def search(state, search_type="bfs"):
         if check_state(cs[0]):  # modified
             print("[", search_type, "] a solution was found!")
             print("[", search_type, "] total of iterations: ", reps)
-            print("[", search_type, "] solutions' depth: ", cs[2])
+            print("[", search_type, "] depth of solution: ", cs[2])
             return True
         else:
             closed_states.append(cs)
