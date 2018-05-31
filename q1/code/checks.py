@@ -16,7 +16,7 @@ def check_solvable(state):
                 acc += 1
 
     if acc % 2 == 1:
-        print("[error] configuration that can not be solved!")
+        print("[error] this configuration can not be solved!")
         return False
     else:
         print("[info] it can be solved, try it!")

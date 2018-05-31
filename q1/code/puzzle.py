@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import sys
 import time
 import threading
 
@@ -11,7 +11,7 @@ from .checks import check_is_state_valid
 
 
 def call_bfs(state):
-    print(">>> bfs rodando...")
+    print("[info] bfs running...")
     start = time.time()
     search(state)  # bfs default
     end = time.time()
@@ -19,7 +19,7 @@ def call_bfs(state):
 
 
 def call_dfs(state):
-    print(">>> dfs rodando...")
+    print("[info] dfs running...")
     start = time.time()
     search(state, "dfs")
     end = time.time()
@@ -27,7 +27,7 @@ def call_dfs(state):
 
 
 def call_iddfs(state, limit, tx):
-    print(">>> iddfs running...")
+    print("[info] iddfs running...")
     start = time.time()
     iddfs(state, limit, tx)
     end = time.time()
@@ -35,29 +35,51 @@ def call_iddfs(state, limit, tx):
 
 
 def main():
-    start_state = input("> ")
-    start_state = list(map(int, start_state.split()))
-    goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+    print("---------- 8-PUZZLE GAME ----------")
+    print("Type 'exit' to get out.")
+    b = threading.Barrier(3)
+    while True:
+        start_state = input("> ")
 
-    if check_is_state_valid(start_state) and check_solvable(start_state):
-        print("[info] initial state: ", start_state)
-        print("[info] final state  : ", goal_state)
+        if start_state == "exit":
+            print("Exiting...")
+            sys.exit()
 
-        limit = 10000  # for iddfs
-        tx = 1000      # for iddfs
-        
-        tbfs = threading.Thread(name='bfs',
-                                target=call_bfs,
-                                args=(start_state,))
+        try:
+            start_state = list(map(int, start_state.split()))
+        except ValueError:
+            print("Wrong input! You need to type 9 digits from 0 to 8,"
+                  " separated by spaces.")
+            continue
 
-        tdfs = threading.Thread(name='dfs',
-                                target=call_dfs,
-                                args=(start_state,))
+        goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
-        tiddfs = threading.Thread(name='iddfs',
-                                  target=call_iddfs,
-                                  args=(start_state, limit, tx))
+        if start_state == goal_state:
+            print("Input state is already solved.")
+            continue
 
-        tbfs.start()
-        tdfs.start()
-        tiddfs.start()
+        if check_is_state_valid(start_state) and check_solvable(start_state):
+            print("---------- 8-PUZZLE GAME: running ----------")
+            print("[info] initial state: ", start_state)
+            print("[info] final state  : ", goal_state)
+
+            limit = 10000  # for iddfs
+            tx = 1000      # for iddfs
+
+            tbfs = threading.Thread(name='bfs',
+                                    target=call_bfs,
+                                    args=(start_state,))
+
+            tdfs = threading.Thread(name='dfs',
+                                    target=call_dfs,
+                                    args=(start_state,))
+
+            tiddfs = threading.Thread(name='iddfs',
+                                      target=call_iddfs,
+                                      args=(start_state, limit, tx))
+
+            tbfs.start()
+            tdfs.start()
+            tiddfs.start()
+
+            b.wait()  # wait for the threads above terminate.
