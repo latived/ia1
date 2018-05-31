@@ -1,0 +1,32 @@
+<!-- rules --> 
+{% block rules_content %}
+    {% if rules_base %}
+        <ul>
+            <h3> Rules' base: </h3>
+            {% for rule in rules_base %}
+                <p>{{ rule }}</p>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No rules available. Add one?</p>
+    {% endif %}
+{% endblock rules_content %}
+
+{% block facts_content %}
+    {% if facts_base %}
+        <ul>
+            <h3> Facts' base: </h3>
+            {% for fact in facts_base %}
+                <p>{{ fact }}</p>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No facts available. Add one?</p>
+    {% endif %}
+{% endblock facts_content %}
+    
+<!-- question asked & chaining -->
+<!-- results -->
+<!-- INFO: explanation function -->
+
+
