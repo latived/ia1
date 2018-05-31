@@ -39,3 +39,16 @@ def check_is_state_valid(state):
     return True
 
 
+def check_input_ok(start_state, goal_state):
+    try:
+        start_state = list(map(int, start_state.split()))
+    except ValueError:
+        print("[error] you need to type 9 digits from 0 to 8,"
+              " separated by spaces.")
+        return False
+
+    if start_state == goal_state:
+        print("[info] input state is already solved.")
+        return False
+
+    return True

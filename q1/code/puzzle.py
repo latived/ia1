@@ -8,6 +8,7 @@ from .algorithms import iddfs
 
 from .checks import check_solvable
 from .checks import check_is_state_valid
+from .checks import check_input_ok
 
 
 def call_bfs(state):
@@ -31,7 +32,7 @@ def call_iddfs(state, limit, tx):
     start = time.time()
     iddfs(state, limit, tx)
     end = time.time()
-    print("[iddfs] tempo total: ", end - start)
+    print("[iddfs] total time: ", end - start)
 
 
 def main():
@@ -39,24 +40,20 @@ def main():
     print("Type 'exit' to get out.")
     b = threading.Barrier(3)
     while True:
+        goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+
         start_state = input("> ")
 
         if start_state == "exit":
-            print("Exiting...")
+            print("[info] exiting...")
             sys.exit()
 
-        try:
-            start_state = list(map(int, start_state.split()))
-        except ValueError:
-            print("Wrong input! You need to type 9 digits from 0 to 8,"
-                  " separated by spaces.")
+        # start_state will be modified if input is ok
+        if not check_input_ok(start_state, goal_state):
             continue
 
-        goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
-
-        if start_state == goal_state:
-            print("Input state is already solved.")
-            continue
+        # FIXME: how to not do this again?
+        start_state = list(map(int, start_state.split()))
 
         if check_is_state_valid(start_state) and check_solvable(start_state):
             print("---------- 8-PUZZLE GAME: running ----------")
@@ -82,4 +79,7 @@ def main():
             tdfs.start()
             tiddfs.start()
 
-            b.wait()  # wait for the threads above terminate.
+            # Wait for all threads terminate.
+            tbfs.join()
+            tiddfs.join()
+            tdfs.join()
