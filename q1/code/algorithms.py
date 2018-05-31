@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .checks import check_state
+from .checks import check_state_is_goal
 
 # In hourly-order from the right.
 valid_moves = {0: [1, 3],
@@ -82,7 +82,7 @@ def iddfs(state, limit, tx):
 
 
 def dls(state, depth):
-    if depth == 0 and check_state(state[0]):
+    if depth == 0 and check_state_is_goal(state[0]):
         # TODO: changes in tx_temp
         print("[iddfs] depth of solution: ", state[2])
         return True 

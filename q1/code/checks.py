@@ -1,11 +1,3 @@
-def show_states_conf(state):
-    print("\t{0} {1} {2}\n\t{3} {4} {5}\n\t{6} {7} {8}\n".format(
-        state[0], state[1], state[2],
-        state[3], state[4], state[5],
-        state[6], state[7], state[8])
-    )
-
-
 def check_solvable(state):
     acc = 0
     temp_state = state[:]
@@ -23,7 +15,7 @@ def check_solvable(state):
         return True
 
 
-def check_state(state):
+def check_state_is_goal(state):
     goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
     return state == goal_state
 
@@ -39,7 +31,7 @@ def check_is_state_valid(state):
     return True
 
 
-def check_input_ok(start_state, goal_state):
+def check_input_ok(start_state):
     try:
         start_state = list(map(int, start_state.split()))
     except ValueError:
@@ -47,7 +39,7 @@ def check_input_ok(start_state, goal_state):
               " separated by spaces.")
         return False
 
-    if start_state == goal_state:
+    if check_state_is_goal(start_state):
         print("[info] input state is already solved.")
         return False
 

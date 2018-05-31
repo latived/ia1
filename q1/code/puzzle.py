@@ -38,7 +38,6 @@ def call_iddfs(state, limit, tx):
 def main():
     print("---------- 8-PUZZLE GAME ----------")
     print("Type 'exit' to get out.")
-    b = threading.Barrier(3)
     while True:
         goal_state = [1, 2, 3, 4, 5, 6, 7, 8, 0]
 
@@ -49,7 +48,7 @@ def main():
             sys.exit()
 
         # start_state will be modified if input is ok
-        if not check_input_ok(start_state, goal_state):
+        if not check_input_ok(start_state):
             continue
 
         # FIXME: how to not do this again?
