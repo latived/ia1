@@ -44,3 +44,11 @@ def check_input_ok(start_state):
         return False
 
     return True
+
+
+def check_child_in_states(child_out, states):
+    # Really inefficient.
+    for child_in in states:
+        if child_out[0] == child_in[0]:
+            return True
+    return False

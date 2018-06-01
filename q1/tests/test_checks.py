@@ -1,6 +1,10 @@
 import random
 import unittest
+
+
 from ..code import checks
+from .mockutils import get_tuple_mock
+from .mockutils import populate_states
 
 
 class ChecksTest(unittest.TestCase):
@@ -86,6 +90,24 @@ class ChecksTest(unittest.TestCase):
             # [n1, n2, ..., n9] to 'n1 n2 ... n9'
             state_ok = str(state_ok)[1:-1].replace(', ', ' ')
             self.assertTrue(checks.check_input_ok(state_ok))
+
+    def test_check_child_in(self):
+        states = []
+
+        child_mock_inside_at_begin = get_tuple_mock()
+        child_mock_inside_at_mid = get_tuple_mock()
+        child_mock_inside_at_end = get_tuple_mock()
+        child_mock_outside = get_tuple_mock()
+
+        states.append(child_mock_inside_at_begin)
+        populate_states(100, states)
+        states.insert(50, child_mock_inside_at_mid)
+        states.append(child_mock_inside_at_end)
+
+        self.assertTrue(checks.check_child_in_states(child_mock_inside_at_begin, states))
+        self.assertTrue(checks.check_child_in_states(child_mock_inside_at_mid, states))
+        self.assertTrue(checks.check_child_in_states(child_mock_inside_at_end, states))
+        self.assertFalse(checks.check_child_in_states(child_mock_outside, states))
 
 
 if __name__ == '__main__':

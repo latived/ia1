@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .checks import check_state_is_goal
+from .checks import check_child_in_states
 
 # In hourly-order from the right.
 valid_moves = {0: [1, 3],
@@ -20,9 +21,19 @@ def gen_children(state):
     for move in moves:
         new_state = state[0].copy()
         new_state[move], new_state[idx_zero] = 0, state[0][move]
+        # TODO: why did I take only parent state, instead of complete tuple here?
         new_state = (new_state, state[0], state[2]+1)
         children.append(new_state)
     return children
+
+
+def remove_marked_children(children, open_states, closed_states):
+    cc = children[:]
+    for child in cc:
+        if check_child_in_states(child, open_states):
+            children.remove(child)
+        if check_child_in_states(child, closed_states):
+            children.remove(child)
 
 
 def search(state, search_type="bfs"):
@@ -39,26 +50,27 @@ def search(state, search_type="bfs"):
         reps += 1
         cs = open_states[0]  # current state
         open_states.remove(cs)
+
+        print(str(cs[0]) + " child of " + str(cs[1]))
         
-        if check_state(cs[0]):  # modified
+        if check_state_is_goal(cs[0]):  # modified
             print("[", search_type, "] a solution was found!")
             print("[", search_type, "] total of iterations: ", reps)
             print("[", search_type, "] depth of solution: ", cs[2])
             return True
         else:
             closed_states.append(cs)
-    
-            # gen_children now returns (state, cs, length_par+1)
-            cs_children = gen_children(cs) 
-            for child in cs_children.copy():
-                if child in open_states:
-                    cs_children.remove(child)
-                if child in closed_states:
-                    cs_children.remove(child)
+            children = gen_children(cs)
+            print("other children " + str(children) + "\n")
+            remove_marked_children(children,
+                                   open_states,
+                                   closed_states)
+
             if search_type == "dfs":
-                open_states = cs_children + open_states
+                open_states = children + open_states
             else:
-                open_states.extend(cs_children)
+                open_states.extend(children)
+
     print("[", search_type, "] solution not found.")
     print("[", search_type, "] total of iterations: ", reps)
     return False
