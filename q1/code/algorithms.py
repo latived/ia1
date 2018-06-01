@@ -14,13 +14,18 @@ valid_moves = {0: [1, 3],
                8: [7, 5]}
 
 
+def _swap_0(state, idx_from, idx_to):
+    state = state[:]  # copy
+    state[idx_to], state[idx_from] = 0, state[idx_to]
+    return state
+
+
 def gen_children(state):
     idx_zero = state[0].index(0)
     moves = valid_moves[idx_zero]
     children = []
     for move in moves:
-        new_state = state[0].copy()
-        new_state[move], new_state[idx_zero] = 0, state[0][move]
+        new_state = _swap_0(state[0].copy(), idx_zero, move)
         # TODO: why did I take only parent state, instead of complete tuple here?
         new_state = (new_state, state[0], state[2]+1)
         children.append(new_state)
