@@ -9,6 +9,15 @@ from .mockutils import populate_states
 
 class ChecksTest(unittest.TestCase):
 
+    def test_check_search_type(self):
+        st_bfs = 'bfs'
+        st_dfs = 'dfs'
+        st_any = 'afs'
+
+        self.assertTrue(checks.check_search_type(st_bfs))
+        self.assertTrue(checks.check_search_type(st_dfs))
+        self.assertFalse(checks.check_search_type(st_any))
+
     # TODO: break this test in two (for oks, for fails)
     def test_check_is_state_solvable(self):
         state_ok = [1, 2, 3,

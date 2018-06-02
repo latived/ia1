@@ -6,7 +6,6 @@ import threading
 from .algorithms import search
 from .algorithms import iddfs
 
-from .checks import check_solvable
 from .checks import check_is_state_valid
 from .checks import check_input_ok
 
@@ -54,7 +53,7 @@ def main():
         # FIXME: how to not do this again?
         start_state = list(map(int, start_state.split()))
 
-        if check_is_state_valid(start_state) and check_solvable(start_state):
+        if check_is_state_valid(start_state):
             print("---------- 8-PUZZLE GAME: running ----------")
             print("[info] initial state: ", start_state)
             print("[info] final state  : ", goal_state)

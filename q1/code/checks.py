@@ -51,4 +51,12 @@ def check_child_in_states(child_out, states):
     for child_in in states:
         if child_out[0] == child_in[0]:
             return True
+
     return False
+
+
+def check_search_type(search_type):
+    if search_type not in ["bfs", "dfs"]:
+        print("[error] algorithm not found: ", search_type)
+        return False
+    return True

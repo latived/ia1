@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from .checks import check_state_is_goal
 from .checks import check_child_in_states
+from .checks import check_search_type
+from .checks import check_solvable
+
+from .exceptions import UnsolvableConfigurationError
 
 # In hourly-order from the right.
 valid_moves = {0: [1, 3],
@@ -42,22 +46,24 @@ def remove_marked_children(children, open_states, closed_states):
 
 
 def search(state, search_type="bfs"):
-    if search_type not in ["bfs", "dfs"]: 
-        print("[error] algorithm not found: ", search_type)
+    if not check_search_type(search_type):
         return False
-   
+
+    # raise can't be solved
+    if not check_solvable(state):
+        raise UnsolvableConfigurationError(state,
+                                           "Can't solve this state because it contains an odd number of permutations.")
+
     state = (state, None, 0)
     open_states = [state]  # modified to know path taken
     closed_states = []
-    reps = -1  # depth began at value 0
+    reps = -1  # depth start with 0
     
     while len(open_states) != 0:
         reps += 1
         cs = open_states[0]  # current state
         open_states.remove(cs)
 
-        print(str(cs[0]) + " child of " + str(cs[1]))
-        
         if check_state_is_goal(cs[0]):  # modified
             print("[", search_type, "] a solution was found!")
             print("[", search_type, "] total of iterations: ", reps)
@@ -66,10 +72,7 @@ def search(state, search_type="bfs"):
         else:
             closed_states.append(cs)
             children = gen_children(cs)
-            print("other children " + str(children) + "\n")
-            remove_marked_children(children,
-                                   open_states,
-                                   closed_states)
+            remove_marked_children(children, open_states, closed_states)
 
             if search_type == "dfs":
                 open_states = children + open_states
@@ -82,7 +85,11 @@ def search(state, search_type="bfs"):
 
 
 def iddfs(state, limit, tx):
-    state = (state, None, 0) 
+    if not check_solvable(state):
+        raise UnsolvableConfigurationError(state,
+                                           "Can't solve this state because it contains an odd number of permutations.")
+
+    state = (state, None, 0)
     tx_temp = tx
     print("[iddfs] used limit: ", limit)
     print("[iddfs] growth rate: ", tx)
