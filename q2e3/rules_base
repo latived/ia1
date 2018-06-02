@@ -4,4 +4,3 @@ IF frog THEN green
 IF croaks AND eats flies THEN frog 
 IF chirps AND sings THEN canary 
 IF canary THEN yellow 
-IF frog THEN reptil 
