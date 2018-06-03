@@ -44,11 +44,14 @@ def main():
             elif confirm == 'yes':
                 RulesUtils.create_rule(antecedents, consequent)
             else:
-                print('Do you want to continue? (yes/no)')
-                confirm = input('> ')
-                InputUtils.check_input_ok(confirm)
-                if confirm == 'no':
-                    break
+                if not RulesUtils.check_for_rules():
+                    print(">! You must add at least one rule.")
+                else:
+                    print('Do you want to continue? (yes/no)')
+                    confirm = input('> ')
+                    InputUtils.check_input_ok(confirm)
+                    if confirm == 'no':
+                        break
 
         print('Rules database now complete. However, you must add your facts to the database.')
         print("""
