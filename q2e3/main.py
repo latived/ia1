@@ -72,12 +72,13 @@ def main():
         print('Facts added to the database.')
         RulesUtils.save_rules_to_file()
     else:
+        # TODO: this else is not tested
         print('Type the file name below, please. Verify that it is in the same folder as this script.')
-        path_file = input('> ')
-        # TODO: implement method check_path_file_ok, and don't forget exception.
-        InputUtils.check_path_file_ok(path_file)
-        RulesUtils.get_rules_from_file(path_file)
-        print('Rules and facts loaded!')
+        while True:
+            path_file = input('> ')
+            if InputUtils.check_path_file_ok(path_file):
+                RulesUtils.get_rules_from_file(path_file)
+                print('Rules and facts loaded!')
 
     print('\n')
     print("""
@@ -102,13 +103,13 @@ def main():
         # TODO: implement method check_input_ok, and don't forget exception.
         InputUtils.check_input_ok(see_facts)
         RulesUtils.get_new_facts()
-    else:
+    elif type_strategy == 2:
         print("""
         Type now what you want to prove (with the given database).
         
         Ex.: 'will_rain' or 'temperature_less_than_20'
         
-        Anything like that, named as variable. If the question doesn't exists in
+        Anything like that, named as variable. If the question doesn't exist in
         the database, an exception will be raised.
         """)
         goal = input('>')
@@ -117,6 +118,8 @@ def main():
         print('Running now backward chaining on "{}"...'.format(goal))
         ChainingStrategy.backward(goal)
         print('Done.')
+    else:
+        print("Not implemented yet.")
 
 
 if __name__ == "__main__":
