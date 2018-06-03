@@ -75,6 +75,27 @@ class RulesUtilsTest(unittest.TestCase):
         with self.assertRaises(InvalidDuplicateRuleError, msg=msg_error):
             RulesUtils.validate_rule(antecedent, csq)
 
+    def test_validate_rule_for_blank_ant(self):
+        ant = ''
+        csq = 'p3'
+        msg_error = 'You can"t have a blank rule'
+        with self.assertRaises(InvalidRuleError, msg=msg_error):
+            RulesUtils.validate_rule(ant, csq)
+
+    def test_validate_rule_for_blank_csq(self):
+        ant = ['p1', 'p2']
+        csq = ''
+        msg_error = 'You can"t have a blank rule'
+        with self.assertRaises(InvalidRuleError, msg=msg_error):
+            RulesUtils.validate_rule(ant, csq)
+
+    def test_validate_rule_for_blank_rule(self):
+        ant = ''
+        csq = ''
+        msg_error = 'You can"t have a blank rule'
+        with self.assertRaises(InvalidRuleError, msg=msg_error):
+            RulesUtils.validate_rule(ant, csq)
+
     def test_add_fact_false(self):
         fact = ''
         self.assertFalse(RulesUtils.add_fact(fact))

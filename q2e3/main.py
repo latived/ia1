@@ -31,7 +31,6 @@ def main():
         """)
         while True:
             RulesUtils.show_rules()
-            # TODO: check for no ant or csq (at leas one)
             antecedents, consequent = RulesUtils.get_rules_from_user()
             RulesUtils.validate_rule(antecedents, consequent)
             print('\nYour rule: ', RulesUtils.show_rule(antecedents, consequent))
