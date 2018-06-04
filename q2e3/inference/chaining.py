@@ -2,31 +2,27 @@ from ia1.q2e3.inference.rules import Rule
 
 
 class ChainingStrategy:
-    @classmethod
-    def backward(cls, goals):
-        pass
+    @staticmethod
+    def backward(goals):
         if type(goals) == str:
             goals = [goals]
 
-        ite_goals = goals.copy()
-        for goal in ite_goals:
+        for goal in goals[:]:
             if goal in Rule.facts:
                 goals.remove(goal)
 
         if len(goals) == 0:
-            print("goal proved true!")
             return True
 
-        new_goal = goals[0]
-        goals.remove(new_goal)
+        actual_goal = goals.pop()
 
-        if new_goal in Rule.rules:
-            antecedents = Rule.rules[new_goal].copy()
-        else:
-            print("couldn't prove goal with given rules' and facts' base.")
-            return False
+        for rule in Rule.rules:
+            if actual_goal == rule.consequent:
+                goals.extend(rule.antecedent)
+            else:
+                return False
 
-        return cls.backward(antecedents)
+        return ChainingStrategy.backward(goals)
 
     @classmethod
     def forward(cls, pos=0):
