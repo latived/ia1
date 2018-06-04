@@ -43,7 +43,7 @@ def main():
             elif confirm == 'yes':
                 RulesUtils.create_rule(antecedents, consequent)
             else:
-                if not RulesUtils.check_for_rules():
+                if not RulesUtils.check_for_rules():  # TODO: test check_for_rules
                     print(">! You must add at least one rule.")
                 else:
                     print('Do you want to continue? (yes/no)')
@@ -87,6 +87,9 @@ def main():
             if InputUtils.check_path_file_ok(path_file):
                 RulesUtils.get_rules_from_file(path_file)
                 print('Rules and facts loaded!')
+                break
+
+        RulesUtils.show_rules()
 
     print('\n')
     print("""
@@ -97,7 +100,6 @@ def main():
     """)
 
     type_strategy = int(input('> '))
-    # TODO: implement method check_strategy_ok, and don't forget exception.
     InputUtils.check_strategy_ok(type_strategy)
 
     # Rules and facts database will now be class attributes of RulesUtils

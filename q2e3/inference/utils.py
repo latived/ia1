@@ -67,30 +67,25 @@ class RulesUtils:
     # FIXME: update this method to accommodate changes
     @staticmethod
     def get_rules_from_file(file_name):
-        pass
-        rules_base = {}
-        facts_base = {}
         with open(file_name) as rules:
             for rule in rules:
-                props = re.split('[IF|AND|THEN]', rule)
+                # This you do:
+                #       IF p1 AND ... AND pn THEN csq
+                # in    [
+                props = re.split('[IF|AND|THEN]', rule.replace(' ', ''))
                 if len(props) == 1:
                     if len(props[0]) > 0:
-                        facts_base.append(props[0].split('\n')[0])
+                        Rule.facts.append(props[0].split('\n')[0])
                     continue
-                while '' in props:
-                    props.remove('')
-                csq = props[-1]
-                csq = csq[1:len(csq)-1]
-                antecedents = []
-                for ant in props[:len(props)-1]:
-                    antecedents.append(ant[1:len(ant)-1])
-                if csq not in rules_base:
-                    rules_base[csq] = []
-                    rules_base[csq].extend(antecedents)
-                else:
-                    rules_base[csq].extend(antecedents)
+                csq = props.pop()[:-1]  # Pop consequent without '\n'
+                antecedent = []
+                for item in props:
+                    if item != '':
+                        antecedent.append(item)
 
-        return [rules_base, facts_base]
+                # TODO: add validate_rule here? or inside create_rule?
+                RulesUtils.create_rule(antecedent, csq)
+
 
     @staticmethod
     def get_new_facts(cls):
@@ -175,6 +170,7 @@ class RulesUtils:
         rule = 'IF ' + ' AND '.join(ant) + ' THEN ' + csq
         return rule
 
+    # TODO: show_facts
     @staticmethod
     def show_rules():
         if len(Rule.rules):

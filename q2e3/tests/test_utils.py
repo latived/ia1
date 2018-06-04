@@ -109,6 +109,9 @@ class RulesUtilsTest(unittest.TestCase):
     def test_check_for_facts(self):
         self.assertTrue(False)
 
+    def test_check_for_rules(self):
+        self.assertTrue(False)
+
     # Try to use mock patchs, mocks for input from user...
     def test_get_rules_from_file(self):
         self.assertTrue(False)
