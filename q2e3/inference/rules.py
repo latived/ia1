@@ -11,7 +11,7 @@ class Rule:
     Consequent is any other premise.
 
     Class variables:
-        rules -- a dictionary of Rules
+        rules -- a list of Rules
         facts -- a list of premises known to be True
 
     Instance variables:
@@ -19,10 +19,19 @@ class Rule:
         consequent -- any other premise
     """
 
-    rules = {}
+    rules = []
     facts = []
 
     def __init__(self, antecedent, consequent):
-        self.antecedent = antecedent
+        self.id = len(Rule.rules) + 1
+        self.antecedent = set(antecedent)
         self.consequent = consequent
+
+    def __str__(self):
+        out_rule = """
+        {}: IF {}
+           THEN {}""".format(self.id,
+                             ' AND '.join(self.antecedent),
+                             self.consequent)
+        return out_rule
 

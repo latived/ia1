@@ -1,6 +1,4 @@
-import re
-
-from .rules import Rule
+from ia1.q2e3.inference.rules import Rule
 
 
 class ChainingStrategy:
@@ -50,54 +48,3 @@ class ChainingStrategy:
                 pos = -1
 
         return cls.forward(pos+1)
-
-
-class RulesUtils:
-
-    @classmethod
-    def get_rules_from_user(cls):
-        pass
-
-    @classmethod
-    def get_rules_from_file(cls, file_name):
-        pass
-        rules_base = {}
-        facts_base = {}
-        with open(file_name) as rules:
-            for rule in rules:
-                props = re.split('[IF|AND|THEN]', rule)
-                if len(props) == 1:
-                    if len(props[0]) > 0:
-                        facts_base.append(props[0].split('\n')[0])
-                    continue
-                while '' in props:
-                    props.remove('')
-                csq = props[-1]
-                csq = csq[1:len(csq)-1]
-                antecedents = []
-                for ant in props[:len(props)-1]:
-                    antecedents.append(ant[1:len(ant)-1])
-                if csq not in rules_base:
-                    rules_base[csq] = []
-                    rules_base[csq].extend(antecedents)
-                else:
-                    rules_base[csq].extend(antecedents)
-
-        return [rules_base, facts_base]
-
-    @classmethod
-    def show_rules(cls, rules_base):
-        print("Rules' base: ")
-        for rule in rules_base:
-            print("\tIF " + " AND ".join(rules_base[rule]) + " THEN " + rule)
-
-    @classmethod
-    def show_facts(cls, facts_base):
-        print("Facts' base: ")
-        for fact in facts_base:
-            print("\t" + fact)
-
-    @classmethod
-    def show_new_facts(cls):
-        pass
-

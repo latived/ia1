@@ -11,3 +11,13 @@ class InputError(Exception):
     def __init__(self, expression, message):
         self.expression = expression
         self.message = message
+
+
+class InvalidRuleError(Exception):
+    pass
+    # put only message
+
+
+class InvalidDuplicateRuleError(Exception):
+    pass
+
