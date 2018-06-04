@@ -61,11 +61,9 @@ def main():
             >         
         
         """)
-
         while True:
             fact = input('> ')
-
-            if not RulesUtils.add_fact(fact):  # False only if fact = ''
+            if not fact:
                 if not RulesUtils.check_for_facts():  # TODO: check_for_facts NOT TESTED
                     print(">! No facts have been added till now. "
                           "You really wishes to continue (yes/no)? "
@@ -74,8 +72,9 @@ def main():
                     InputUtils.check_input_ok(confirm)
                     if confirm == 'yes':
                         break
-                else:  # There is at least one fact in database, and user doesn't want more.
-                    break
+                break
+            elif RulesUtils.add_fact(fact):
+                continue
 
         print('Facts added to the database.')
         RulesUtils.save_rules_to_file()
@@ -119,12 +118,13 @@ def main():
         
         Ex.: 'will_rain' or 'temperature_less_than_20'
         
-        Anything like that, named as variable. If the question doesn't exist in
-        the database, an exception will be raised.
+        Anything like that, named as variable. 
         """)
-        goal = input('>')
-        # TODO: implement method verify_goal, and don't forget exception.
-        RulesUtils.verify_goal(goal)
+        while True:
+            goal = input('>')
+            if RulesUtils.check_variable(goal):
+                break
+
         print('Running now backward chaining on "{}"...'.format(goal))
         ChainingStrategy.backward(goal)
         print('Done.')

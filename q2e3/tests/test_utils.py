@@ -2,7 +2,8 @@ import random
 import string
 import unittest
 
-from ia1.q2e3.inference.exceptions import InputError, InvalidRuleError, InvalidDuplicateRuleError
+from ia1.q2e3.inference.exceptions import InputError, InvalidRuleError, InvalidDuplicateRuleError, \
+    GoalNotFoundException, InvalidGoalException
 from ia1.q2e3.inference.rules import Rule
 from ia1.q2e3.inference.utils import InputUtils, RulesUtils
 
@@ -126,9 +127,6 @@ class RulesUtilsTest(unittest.TestCase):
         self.assertTrue(False)
 
     def test_get_new_facts(self):
-        self.assertTrue(False)
-
-    def test_verify_goal(self):
         self.assertTrue(False)
 
 

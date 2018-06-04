@@ -86,13 +86,8 @@ class RulesUtils:
                 # TODO: add validate_rule here? or inside create_rule?
                 RulesUtils.create_rule(antecedent, csq)
 
-
     @staticmethod
     def get_new_facts(cls):
-        pass
-
-    @staticmethod
-    def verify_goal(goal_to_check):
         pass
 
     @staticmethod
@@ -102,8 +97,12 @@ class RulesUtils:
         #   - consequent mixed in antecedents
         #   - has already been added
         #   - obviously can't be blank
-        if ant == '' or csq == '':
+        if '' in ant or csq:
             raise InvalidRuleError("You can't have a blank rule!")
+
+        for var in ant+csq:
+            if not RulesUtils.check_variable(var, log=False):  # TODO: test for it
+                InvalidRuleError("A variable can not have spaces or punctuations.")
 
         sz_set_ant = len(set(ant))
         sz_list_ant = len(ant)
@@ -130,15 +129,22 @@ class RulesUtils:
         return False
 
     @staticmethod
-    def add_fact(fact):
-        if fact == '':
-            return False
-        elif ' ' in fact:
-            print(">! Premises variables can't contain spaces. Type again, please.")
-        elif RulesUtils._check_for_punctuation(fact):
-            print(">! Premises variables can contain only '_' as punctuation. Type again, please.")
-        else:
+    def add_fact(fact):  # TODO: test for changes
+        if RulesUtils.check_variable(fact):
             Rule.facts.append(fact)
+            return True
+        return False
+
+    @staticmethod
+    def check_variable(variable, log=True):  # TODO: test for changes
+        if ' ' in variable:
+            if log:
+                print(">! Premises variables can't contain spaces. Type again, please.")
+            return False
+        elif RulesUtils._check_for_punctuation(variable):
+            if log:
+                print(">! Premises variables can contain only '_' as punctuation. Type again, please.")
+            return False
 
         return True
 
