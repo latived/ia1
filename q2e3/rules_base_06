@@ -1,0 +1,20 @@
+a
+b
+c
+d
+e
+f
+g
+h
+i
+IF a AND d AND nao_tem THEN z
+IF nao_tem AND e AND x AND y THEN w
+IF z AND w THEN goal
+IF z AND w AND i THEN goal
+IF f THEN v
+IF v AND g THEN u
+IF u AND b AND c THEN y
+IF a AND b AND c AND d AND f THEN x
+IF p AND q THEN m
+IF a AND d THEN z
+IF h AND e AND x AND y THEN w

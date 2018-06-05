@@ -105,13 +105,17 @@ def main():
 
     if type_strategy == 1:
         print('Running now forward chaining...')
-        ChainingStrategy.forward()
+        new_facts = ChainingStrategy.forward()
         print('Done.')
-        print("Type 'yes' if you want to see the new facts discovered ('no' otherwise).")
-        see_facts = input('> ')
-        # TODO: implement method check_input_ok, and don't forget exception.
-        InputUtils.check_input_ok(see_facts)
-        RulesUtils.get_new_facts()
+        print('Showing new facts...')
+        RulesUtils.show_new_facts(new_facts)
+        print("Type 'yes' if you want to save the new facts discovered ('no' otherwise).")
+        save_facts = input('> ')
+        InputUtils.check_input_ok(save_facts)
+        if save_facts == 'yes':
+            RulesUtils.merge_new_facts(new_facts)
+            RulesUtils.save_rules_to_file()
+        print('Bye!')
     elif type_strategy == 2:
         print("""
         Type now what you want to prove (with the given database).
@@ -126,7 +130,11 @@ def main():
                 break
 
         print('Running now backward chaining on "{}"...'.format(goal))
-        ChainingStrategy.backward(goal)
+        result_msg = 'Based on the existing database, we have {} = {}.'
+        if ChainingStrategy.backward(goal):
+            print(result_msg.format(goal, True))
+        else:
+            print(result_msg.format(goal, False))
         print('Done.')
     else:
         print("Not implemented yet.")

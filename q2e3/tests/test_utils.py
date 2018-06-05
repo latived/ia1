@@ -2,9 +2,7 @@ import random
 import string
 import unittest
 
-from ia1.q2e3.inference.exceptions import InputError, InvalidRuleError, InvalidDuplicateRuleError, \
-    GoalNotFoundException, InvalidGoalException
-from ia1.q2e3.inference.rules import Rule
+from ia1.q2e3.inference.exceptions import InputError, InvalidRuleError, InvalidDuplicateRuleError
 from ia1.q2e3.inference.utils import InputUtils, RulesUtils
 
 
@@ -79,39 +77,51 @@ class RulesUtilsTest(unittest.TestCase):
     def test_validate_rule_for_blank_ant(self):
         ant = ''
         csq = 'p3'
-        msg_error = 'You can"t have a blank rule'
+        msg_error = 'You can"t have a blank rule!'
         with self.assertRaises(InvalidRuleError, msg=msg_error):
             RulesUtils.validate_rule(ant, csq)
 
     def test_validate_rule_for_blank_csq(self):
         ant = ['p1', 'p2']
         csq = ''
-        msg_error = 'You can"t have a blank rule'
+        msg_error = 'You can"t have a blank rule!'
         with self.assertRaises(InvalidRuleError, msg=msg_error):
             RulesUtils.validate_rule(ant, csq)
 
     def test_validate_rule_for_blank_rule(self):
         ant = ''
         csq = ''
-        msg_error = 'You can"t have a blank rule'
+        msg_error = 'You can"t have a blank rule!'
         with self.assertRaises(InvalidRuleError, msg=msg_error):
             RulesUtils.validate_rule(ant, csq)
 
-    def test_add_fact_false(self):
-        fact = ''
-        self.assertFalse(RulesUtils.add_fact(fact))
-
-    def test_add_fact_true(self):
+    def test_check_variable_false(self):
         fact_w_sp = UtilsTest._random_string(2, 4) + ' ' + UtilsTest._random_string(2, 4)
-        fact_wo_sp = UtilsTest._random_string(8, 12)
-        self.assertTrue(RulesUtils.add_fact(fact_w_sp))
-        self.assertTrue(RulesUtils.add_fact(fact_wo_sp))
+        self.assertFalse(RulesUtils.add_fact(fact_w_sp))
 
-    def test_check_for_facts(self):
+    def test_check_variable_false_with_punc(self):
+        fact_wo_sp_but_with_punc = UtilsTest._random_string(8, 12)
+        self.assertFalse(RulesUtils.add_fact(fact_wo_sp_but_with_punc))
+
+    def test_check_variable_true(self):
         self.assertTrue(False)
 
     def test_check_for_rules(self):
-        self.assertTrue(False)
+        ant = ['p1', 'p2']
+        csq = 'p3'
+        RulesUtils.create_rule(ant, csq)
+        self.assertTrue(RulesUtils.check_for_rules())
+
+    def test_check_for_rules_false(self):
+        self.assertFalse(RulesUtils.check_for_rules())
+
+    def test_check_for_facts(self):
+        fact = 'f1'
+        RulesUtils.add_fact(fact)
+        self.assertTrue(RulesUtils.check_for_facts())
+
+    def test_check_for_facts_false(self):
+        self.assertFalse(RulesUtils.check_for_facts())
 
     # Try to use mock patchs, mocks for input from user...
     def test_get_rules_from_file(self):
@@ -123,11 +133,11 @@ class RulesUtilsTest(unittest.TestCase):
     def test_save_rules_to_file(self):
         self.assertTrue(False)
 
-    def test_create_rule(self):
-        self.assertTrue(False)
-
     def test_get_new_facts(self):
         self.assertTrue(False)
+
+    def tearDown(self):
+        RulesUtils.clear_running_database()
 
 
 if __name__ == '__main__':

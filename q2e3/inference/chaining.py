@@ -1,46 +1,48 @@
 from ia1.q2e3.inference.rules import Rule
 
 
+# TODO: conflict resolution
 class ChainingStrategy:
+    """
+    Backward and forward methods as in:
+        http://www-personal.umd.umich.edu/~leortiz/teaching/6.034f/Fall05/rules/fwd_bck.pdf
+    """
+
     @staticmethod
-    def backward(goals):
-        if type(goals) == str:
-            goals = [goals]
-
-        for goal in goals[:]:
-            if goal in Rule.facts:
-                goals.remove(goal)
-
-        if len(goals) == 0:
+    def backward(goal):
+        if goal in Rule.facts:
             return True
 
-        actual_goal = goals.pop()
+        matches = [rule for rule in Rule.rules if goal == rule.consequent]
 
-        for rule in Rule.rules:
-            if actual_goal == rule.consequent:
-                goals.extend(rule.antecedent)
-            else:
-                return False
+        if not len(matches):
+            return False
+        else:
+            for rule in matches:
+                results = [ChainingStrategy.backward(premise) for premise in rule.antecedent]
+                if all(results):
+                    return True
+            return False
 
-        return ChainingStrategy.backward(goals)
+    @staticmethod
+    def forward():
+        new_facts = Rule.facts[:]
+        recent_added = []
 
-    @classmethod
-    def forward(cls, pos=0):
-        pass
-        if pos == len(Rule.rules):
-            return True
+        def in_facts(premise):
+            return premise in new_facts
 
-        csq = list(Rule.rules.keys())[pos]
+        def add(csq):
+            new_facts.append(csq)
+            recent_added.append(csq)
 
-        antecedents = Rule.rules[csq].copy()
+        has_changed = True
+        while has_changed:
+            has_changed = False
+            for rule in Rule.rules:
+                matches = [in_facts(premise) for premise in rule.antecedent]
+                if all(matches) and not in_facts(rule.consequent):
+                    add(rule.consequent)
+                    has_changed = True
 
-        if csq not in Rule.facts:
-            for ant in Rule.rules[csq]:
-                if ant in Rule.facts:
-                    antecedents.remove(ant)
-
-            if len(antecedents) == 0:
-                Rule.facts.append(csq)
-                pos = -1
-
-        return cls.forward(pos+1)
+        return recent_added

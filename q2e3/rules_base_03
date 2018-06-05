@@ -1,0 +1,9 @@
+a
+b
+c
+d
+e
+IF a AND b THEN z
+IF z THEN w
+IF c AND d AND w THEN x
+IF e AND f THEN y

@@ -1,0 +1,4 @@
+IF a AND b THEN c
+IF c THEN d
+a
+b

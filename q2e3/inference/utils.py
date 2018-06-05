@@ -87,7 +87,7 @@ class RulesUtils:
                 RulesUtils.create_rule(antecedent, csq)
 
     @staticmethod
-    def get_new_facts(cls):
+    def get_new_facts():
         pass
 
     @staticmethod
@@ -97,10 +97,10 @@ class RulesUtils:
         #   - consequent mixed in antecedents
         #   - has already been added
         #   - obviously can't be blank
-        if '' in ant or csq:
+        if ant == '' or csq == '':
             raise InvalidRuleError("You can't have a blank rule!")
 
-        for var in ant+csq:
+        for var in ant + list(csq):
             if not RulesUtils.check_variable(var, log=False):  # TODO: test for it
                 InvalidRuleError("A variable can not have spaces or punctuations.")
 
@@ -185,3 +185,27 @@ class RulesUtils:
                 print('\t' + str(rule))
         print('\n')
 
+    @staticmethod
+    def show_facts():
+        if len(Rule.facts):
+            print(">>> FACTS <<<")
+            print('\n')
+            for fact in Rule.facts:
+                print('\t' + fact)
+        print('\n')
+
+    @staticmethod
+    def show_new_facts(new_facts):
+        idx = 1
+        for fact in new_facts:
+            print("\t{}: {}".format(idx, fact))
+            idx += 1
+
+    @staticmethod
+    def merge_new_facts(new_facts):
+        Rule.facts += new_facts
+
+    @staticmethod
+    def clear_running_database():
+        del Rule.rules[:]
+        del Rule.facts[:]
