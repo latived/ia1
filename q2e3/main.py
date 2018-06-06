@@ -89,6 +89,7 @@ def main():
                 break
 
         RulesUtils.show_rules()
+        RulesUtils.show_facts()
 
     print('\n')
     print("""
@@ -107,14 +108,17 @@ def main():
         print('Running now forward chaining...')
         new_facts = ChainingStrategy.forward()
         print('Done.')
-        print('Showing new facts...')
-        RulesUtils.show_new_facts(new_facts)
-        print("Type 'yes' if you want to save the new facts discovered ('no' otherwise).")
-        save_facts = input('> ')
-        InputUtils.check_input_ok(save_facts)
-        if save_facts == 'yes':
-            RulesUtils.merge_new_facts(new_facts)
-            RulesUtils.save_rules_to_file()
+        if new_facts:
+            print('Showing new facts...')
+            RulesUtils.show_new_facts(new_facts)
+            print("Type 'yes' if you want to save the new facts discovered ('no' otherwise).")
+            save_facts = input('> ')
+            InputUtils.check_input_ok(save_facts)
+            if save_facts == 'yes':
+                RulesUtils.merge_new_facts(new_facts)
+                RulesUtils.save_rules_to_file()
+        else:
+            print('No new facts have been discovered.')
         print('Bye!')
     elif type_strategy == 2:
         print("""
