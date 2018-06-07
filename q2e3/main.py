@@ -137,6 +137,11 @@ def main():
         result_msg = 'Based on the existing database, we have {} = {}.'
         if ChainingStrategy.backward(goal):
             print(result_msg.format(goal, True))
+            print("Type 'yes' if you want to see the explanation ('no' otherwise).")
+            confirm = input('> ')
+            InputUtils.check_input_ok(confirm)
+            if confirm == 'yes':
+                ChainingStrategy.show_explanation_tree(goal)
         else:
             print(result_msg.format(goal, False))
         print('Done.')

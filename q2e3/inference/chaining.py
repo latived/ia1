@@ -8,8 +8,22 @@ class ChainingStrategy:
         http://www-personal.umd.umich.edu/~leortiz/teaching/6.034f/Fall05/rules/fwd_bck.pdf
     """
 
+    explanation_tree = {}
+
+    @staticmethod
+    def show_explanation_tree(root, levels=49, spaces=0):
+        if levels == 49:
+            print('\n')
+            print(root + ': ')
+        if root in ChainingStrategy.explanation_tree.keys():
+            # print("{}{}: {}".format((7-levels)*'\t', root, ChainingStrategy.explanation_tree[root]))
+            for leaf in ChainingStrategy.explanation_tree[root]:
+                print('{}{} '.format(spaces*'| '+'\\_'+(49-levels)*'_', leaf))
+                ChainingStrategy.show_explanation_tree(leaf, levels-7, spaces+1)
+
     @staticmethod
     def backward(goal):
+        #print("trying: {}".format(goal))
         if goal in Rule.facts:
             return True
 
@@ -20,7 +34,9 @@ class ChainingStrategy:
         else:
             for rule in matches:
                 results = [ChainingStrategy.backward(premise) for premise in rule.antecedent]
+                #print("result(s) for {} child(ren) {}: {}".format(rule.consequent, rule.antecedent, results))
                 if all(results):
+                    ChainingStrategy.explanation_tree[rule.consequent] = {premise for premise in rule.antecedent}
                     return True
             return False
 
